@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Monkey face -->
+  <circle cx="64" cy="68" r="42" fill="#8D6E63"/>
+  
+  <!-- Ears -->
+  <circle cx="28" cy="58" r="16" fill="#A1887F"/>
+  <circle cx="28" cy="58" r="10" fill="#D7CCC8"/>
+  <circle cx="100" cy="58" r="16" fill="#A1887F"/>
+  <circle cx="100" cy="58" r="10" fill="#D7CCC8"/>
+  
+  <!-- Face area -->
+  <ellipse cx="64" cy="75" rx="32" ry="28" fill="#FFCCBC"/>
+  
+  <!-- Eyes -->
+  <circle cx="52" cy="62" r="8" fill="#FFF"/>
+  <circle cx="52" cy="64" r="6" fill="#333"/>
+  <circle cx="54" cy="62" r="2" fill="#FFF"/>
+  <circle cx="76" cy="62" r="8" fill="#FFF"/>
+  <circle cx="76" cy="64" r="6" fill="#333"/>
+  <circle cx="78" cy="62" r="2" fill="#FFF"/>
+  
+  <!-- Nose -->
+  <ellipse cx="64" cy="78" rx="10" ry="8" fill="#D7CCC8"/>
+  <ellipse cx="60" cy="78" rx="3" ry="4" fill="#333"/>
+  <ellipse cx="68" cy="78" rx="3" ry="4" fill="#333"/>
+  
+  <!-- Mouth -->
+  <path d="M 50 88 Q 64 95 78 88" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M 64 86 L 64 90" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+</svg>

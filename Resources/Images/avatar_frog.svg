@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Frog head -->
+  <ellipse cx="64" cy="70" rx="42" ry="38" fill="#66BB6A"/>
+  
+  <!-- Left eye bulge -->
+  <ellipse cx="45" cy="50" rx="18" ry="20" fill="#81C784"/>
+  <circle cx="45" cy="48" r="12" fill="#FFF"/>
+  <circle cx="45" cy="48" r="8" fill="#333"/>
+  <circle cx="47" cy="46" r="3" fill="#FFF"/>
+  
+  <!-- Right eye bulge -->
+  <ellipse cx="83" cy="50" rx="18" ry="20" fill="#81C784"/>
+  <circle cx="83" cy="48" r="12" fill="#FFF"/>
+  <circle cx="83" cy="48" r="8" fill="#333"/>
+  <circle cx="85" cy="46" r="3" fill="#FFF"/>
+  
+  <!-- Mouth -->
+  <path d="M 45 78 Q 64 88 83 78" stroke="#4CAF50" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <ellipse cx="64" cy="82" rx="15" ry="8" fill="#4CAF50" opacity="0.3"/>
+  
+  <!-- Nostrils -->
+  <circle cx="58" cy="68" r="2" fill="#4CAF50"/>
+  <circle cx="70" cy="68" r="2" fill="#4CAF50"/>
+  
+  <!-- Spots -->
+  <circle cx="40" cy="75" r="4" fill="#4CAF50" opacity="0.5"/>
+  <circle cx="88" cy="75" r="4" fill="#4CAF50" opacity="0.5"/>
+  <circle cx="50" cy="88" r="3" fill="#4CAF50" opacity="0.5"/>
+  <circle cx="78" cy="88" r="3" fill="#4CAF50" opacity="0.5"/>
+</svg>

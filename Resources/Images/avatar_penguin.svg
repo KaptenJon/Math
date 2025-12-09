@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Penguin body -->
+  <ellipse cx="64" cy="70" rx="38" ry="45" fill="#333"/>
+  
+  <!-- White belly -->
+  <ellipse cx="64" cy="75" rx="28" ry="35" fill="#FFF"/>
+  
+  <!-- Head -->
+  <circle cx="64" cy="45" r="28" fill="#333"/>
+  
+  <!-- White face -->
+  <ellipse cx="64" cy="48" rx="22" ry="20" fill="#FFF"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="54" cy="45" rx="8" ry="10" fill="#FFF"/>
+  <circle cx="54" cy="47" r="5" fill="#333"/>
+  <circle cx="56" cy="45" r="2" fill="#FFF"/>
+  <ellipse cx="74" cy="45" rx="8" ry="10" fill="#FFF"/>
+  <circle cx="74" cy="47" r="5" fill="#333"/>
+  <circle cx="76" cy="45" r="2" fill="#FFF"/>
+  
+  <!-- Beak -->
+  <ellipse cx="64" cy="55" rx="6" ry="4" fill="#FFA726"/>
+  <path d="M 64 55 L 64 60" stroke="#FFA726" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Feet -->
+  <ellipse cx="52" cy="110" rx="10" ry="6" fill="#FFA726"/>
+  <ellipse cx="76" cy="110" rx="10" ry="6" fill="#FFA726"/>
+  
+  <!-- Flippers -->
+  <ellipse cx="28" cy="75" rx="8" ry="20" fill="#333" transform="rotate(-20 28 75)"/>
+  <ellipse cx="100" cy="75" rx="8" ry="20" fill="#333" transform="rotate(20 100 75)"/>
+</svg>

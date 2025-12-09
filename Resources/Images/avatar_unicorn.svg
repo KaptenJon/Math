@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Unicorn face -->
+  <circle cx="64" cy="70" r="40" fill="#E1BEE7"/>
+  
+  <!-- Horn -->
+  <path d="M 64 20 L 58 45 L 70 45 Z" fill="#FFD700"/>
+  <path d="M 60 30 L 58 35 L 62 35 Z" fill="#FFF" opacity="0.6"/>
+  <path d="M 64 38 L 62 42 L 66 42 Z" fill="#FFF" opacity="0.6"/>
+  
+  <!-- Ears -->
+  <ellipse cx="42" cy="42" rx="10" ry="16" fill="#CE93D8" transform="rotate(-20 42 42)"/>
+  <ellipse cx="42" cy="42" rx="5" ry="10" fill="#F3E5F5" transform="rotate(-20 42 42)"/>
+  <ellipse cx="86" cy="42" rx="10" ry="16" fill="#CE93D8" transform="rotate(20 86 42)"/>
+  <ellipse cx="86" cy="42" rx="5" ry="10" fill="#F3E5F5" transform="rotate(20 86 42)"/>
+  
+  <!-- Eyes -->
+  <circle cx="52" cy="65" r="7" fill="#333"/>
+  <circle cx="54" cy="63" r="3" fill="#FFF"/>
+  <ellipse cx="50" cy="70" rx="6" ry="3" fill="#FFF" opacity="0.3"/>
+  <circle cx="76" cy="65" r="7" fill="#333"/>
+  <circle cx="78" cy="63" r="3" fill="#FFF"/>
+  <ellipse cx="74" cy="70" rx="6" ry="3" fill="#FFF" opacity="0.3"/>
+  
+  <!-- Nose -->
+  <ellipse cx="64" cy="80" rx="6" ry="4" fill="#BA68C8"/>
+  
+  <!-- Mouth -->
+  <path d="M 64 84 Q 56 88 50 85" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M 64 84 Q 72 88 78 85" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Mane -->
+  <path d="M 45 50 Q 35 45 32 55" stroke="#FF80AB" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M 40 60 Q 28 58 25 68" stroke="#81D4FA" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M 38 72 Q 26 72 22 82" stroke="#CE93D8" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M 83 50 Q 93 45 96 55" stroke="#FF80AB" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M 88 60 Q 100 58 103 68" stroke="#81D4FA" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M 90 72 Q 102 72 106 82" stroke="#CE93D8" stroke-width="6" fill="none" stroke-linecap="round"/>
+  
+  <!-- Sparkles -->
+  <circle cx="30" cy="35" r="2" fill="#FFD700"/>
+  <circle cx="98" cy="35" r="2" fill="#FFD700"/>
+</svg>

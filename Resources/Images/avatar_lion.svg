@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Mane -->
+  <circle cx="64" cy="64" r="50" fill="#FFB74D"/>
+  <circle cx="40" cy="40" r="12" fill="#FFA726"/>
+  <circle cx="64" cy="30" r="12" fill="#FFA726"/>
+  <circle cx="88" cy="40" r="12" fill="#FFA726"/>
+  <circle cx="100" cy="64" r="12" fill="#FFA726"/>
+  <circle cx="28" cy="64" r="12" fill="#FFA726"/>
+  <circle cx="40" cy="88" r="12" fill="#FFA726"/>
+  <circle cx="88" cy="88" r="12" fill="#FFA726"/>
+  
+  <!-- Face -->
+  <circle cx="64" cy="68" r="35" fill="#FFCC80"/>
+  
+  <!-- Eyes -->
+  <circle cx="52" cy="62" r="6" fill="#333"/>
+  <circle cx="54" cy="60" r="2" fill="#FFF"/>
+  <circle cx="76" cy="62" r="6" fill="#333"/>
+  <circle cx="78" cy="60" r="2" fill="#FFF"/>
+  
+  <!-- Nose -->
+  <path d="M 64 75 L 60 78 L 68 78 Z" fill="#D84315"/>
+  
+  <!-- Mouth -->
+  <path d="M 64 78 Q 56 85 48 82" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M 64 78 Q 72 85 80 82" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Whisker dots -->
+  <circle cx="42" cy="72" r="2" fill="#8D6E63"/>
+  <circle cx="42" cy="78" r="2" fill="#8D6E63"/>
+  <circle cx="86" cy="72" r="2" fill="#8D6E63"/>
+  <circle cx="86" cy="78" r="2" fill="#8D6E63"/>
+</svg>

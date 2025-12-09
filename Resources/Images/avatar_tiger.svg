@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Tiger face -->
+  <circle cx="64" cy="68" r="42" fill="#FF9800"/>
+  
+  <!-- Stripes -->
+  <path d="M 40 50 Q 35 55 38 60" stroke="#333" stroke-width="3" fill="none"/>
+  <path d="M 45 45 Q 42 52 44 58" stroke="#333" stroke-width="3" fill="none"/>
+  <path d="M 88 50 Q 93 55 90 60" stroke="#333" stroke-width="3" fill="none"/>
+  <path d="M 83 45 Q 86 52 84 58" stroke="#333" stroke-width="3" fill="none"/>
+  <path d="M 50 85 Q 54 90 58 88" stroke="#333" stroke-width="2.5" fill="none"/>
+  <path d="M 70 88 Q 74 90 78 85" stroke="#333" stroke-width="2.5" fill="none"/>
+  
+  <!-- Ears -->
+  <circle cx="38" cy="40" r="12" fill="#FF9800" stroke="#333" stroke-width="2"/>
+  <circle cx="38" cy="40" r="6" fill="#FFCCBC"/>
+  <circle cx="90" cy="40" r="12" fill="#FF9800" stroke="#333" stroke-width="2"/>
+  <circle cx="90" cy="40" r="6" fill="#FFCCBC"/>
+  
+  <!-- White muzzle area -->
+  <ellipse cx="64" cy="80" rx="28" ry="22" fill="#FFF"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="50" cy="62" rx="8" ry="10" fill="#FFF"/>
+  <circle cx="50" cy="64" r="5" fill="#333"/>
+  <circle cx="52" cy="62" r="2" fill="#FFF"/>
+  <ellipse cx="78" cy="62" rx="8" ry="10" fill="#FFF"/>
+  <circle cx="78" cy="64" r="5" fill="#333"/>
+  <circle cx="80" cy="62" r="2" fill="#FFF"/>
+  
+  <!-- Nose -->
+  <path d="M 64 78 L 60 82 L 68 82 Z" fill="#FF6B6B"/>
+  
+  <!-- Mouth -->
+  <path d="M 64 82 Q 56 88 48 84" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M 64 82 Q 72 88 80 84" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>
