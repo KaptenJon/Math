@@ -116,16 +116,27 @@ public class GameService : IGameService
         if (lastAnswerCorrect)
         {
             _streak++;
-            // Increase difficulty every 2 additional correct answers, without losing streak count
-            if (_streak % 2 == 0)
+            // Difficulty increases more frequently for higher grades
+            int streakThreshold = CurrentPlayer.Grade switch
             {
-                _currentDifficulty = System.Math.Min(_currentDifficulty + 1, 10);
+                0 or 1 => 3,  // Grade 0-1: increase every 3 correct answers
+                2 or 3 => 2,  // Grade 2-3: increase every 2 correct answers
+                _ => 1        // Grade 4-5: increase every correct answer
+            };
+            
+            if (_streak % streakThreshold == 0)
+            {
+                // Max difficulty scales with grade: grade 0-1 max 6, grade 2-3 max 8, grade 4-5 max 10
+                int maxDifficulty = 6 + (CurrentPlayer.Grade / 2) * 2;
+                _currentDifficulty = System.Math.Min(_currentDifficulty + 1, maxDifficulty);
             }
         }
         else
         {
             _streak = 0;
-            _currentDifficulty = System.Math.Max(1, _currentDifficulty - 1);
+            // Reduce difficulty but not as aggressively for higher grades
+            int reduction = CurrentPlayer.Grade >= 3 ? 1 : 2;
+            _currentDifficulty = System.Math.Max(1, _currentDifficulty - reduction);
         }
     }
 
@@ -165,7 +176,18 @@ public class GameService : IGameService
     private Question GenerateQuestion(string behavior)
     {
         // Adaptive base: grade + dynamic difficulty multiplier
-        int baseMax = 10 + CurrentPlayer.Grade * 10 + _currentDifficulty * 5;
+        // Higher grades get bigger numbers and more challenging problems
+        int gradeMultiplier = CurrentPlayer.Grade switch
+        {
+            0 => 10,   // Grade 0: numbers up to 10 + difficulty
+            1 => 15,   // Grade 1: numbers up to 15 + difficulty
+            2 => 20,   // Grade 2: numbers up to 20 + difficulty
+            3 => 30,   // Grade 3: numbers up to 30 + difficulty
+            4 => 50,   // Grade 4: numbers up to 50 + difficulty
+            _ => 100   // Grade 5: numbers up to 100 + difficulty
+        };
+        
+        int baseMax = gradeMultiplier + _currentDifficulty * 5;
         int a = _rng.Next(0, baseMax);
         int b = _rng.Next(1, baseMax); // avoid zero for division denominator
 
@@ -173,8 +195,8 @@ public class GameService : IGameService
         {
             var c when c.StartsWith("Add", StringComparison.OrdinalIgnoreCase) => new Question { Text = $"{a} + {b} = ?", Answer = a + b },
             var c when c.StartsWith("Sub", StringComparison.OrdinalIgnoreCase) => new Question { Text = $"{a} - {b} = ?", Answer = a - b },
-            var c when c.StartsWith("Mult", StringComparison.OrdinalIgnoreCase) => new Question { Text = $"{a} × {b} = ?", Answer = a * b },
-            var c when c.StartsWith("Div", StringComparison.OrdinalIgnoreCase) => new Question { Text = $"{a*b} ÷ {b} = ?", Answer = a },
+            var c when c.StartsWith("Mult", StringComparison.OrdinalIgnoreCase) => GenerateMultiplicationQuestion(a, b),
+            var c when c.StartsWith("Div", StringComparison.OrdinalIgnoreCase) => GenerateDivisionQuestion(a, b),
             var c when c.StartsWith("Algebra", StringComparison.OrdinalIgnoreCase) => AlgebraQuestion(),
             var c when c.StartsWith("Problem", StringComparison.OrdinalIgnoreCase) => WordProblem(),
             var c when c.StartsWith("Graph", StringComparison.OrdinalIgnoreCase) => GraphQuestion(),
@@ -182,28 +204,118 @@ public class GameService : IGameService
         };
     }
 
+    private Question GenerateMultiplicationQuestion(int a, int b)
+    {
+        // For lower grades and difficulties, use smaller numbers for multiplication
+        if (CurrentPlayer.Grade <= 2 || _currentDifficulty <= 3)
+        {
+            // Multiplication tables (1-12)
+            a = _rng.Next(1, System.Math.Min(12, 5 + _currentDifficulty));
+            b = _rng.Next(1, System.Math.Min(12, 5 + _currentDifficulty));
+        }
+        else
+        {
+            // Higher grades can handle larger multiplications
+            int maxVal = CurrentPlayer.Grade switch
+            {
+                3 => 15 + _currentDifficulty * 2,
+                4 => 20 + _currentDifficulty * 3,
+                _ => 30 + _currentDifficulty * 4
+            };
+            a = _rng.Next(1, maxVal);
+            b = _rng.Next(1, maxVal);
+        }
+        return new Question { Text = $"{a} × {b} = ?", Answer = a * b };
+    }
+
+    private Question GenerateDivisionQuestion(int a, int b)
+    {
+        // Make sure division gives whole numbers
+        // For lower grades, use multiplication tables
+        if (CurrentPlayer.Grade <= 2 || _currentDifficulty <= 3)
+        {
+            a = _rng.Next(1, System.Math.Min(12, 5 + _currentDifficulty));
+            b = _rng.Next(1, System.Math.Min(12, 5 + _currentDifficulty));
+        }
+        else
+        {
+            int maxVal = CurrentPlayer.Grade switch
+            {
+                3 => 15 + _currentDifficulty * 2,
+                4 => 20 + _currentDifficulty * 3,
+                _ => 30 + _currentDifficulty * 4
+            };
+            a = _rng.Next(1, maxVal);
+            b = _rng.Next(1, maxVal);
+        }
+        return new Question { Text = $"{a * b} ÷ {b} = ?", Answer = a };
+    }
+
     private Question AlgebraQuestion()
     {
-        int x = _rng.Next(1, 12 + _currentDifficulty);
-        int m = _rng.Next(1, 9 + _currentDifficulty);
-        int b = _rng.Next(0, 20 + _currentDifficulty * 2);
+        // Scale algebra complexity with grade and difficulty
+        int maxX = CurrentPlayer.Grade switch
+        {
+            3 => 10 + _currentDifficulty,
+            4 => 15 + _currentDifficulty * 2,
+            _ => 20 + _currentDifficulty * 2
+        };
+        
+        int maxM = CurrentPlayer.Grade switch
+        {
+            3 => 5 + _currentDifficulty,
+            4 => 8 + _currentDifficulty,
+            _ => 12 + _currentDifficulty * 2
+        };
+        
+        int maxB = CurrentPlayer.Grade switch
+        {
+            3 => 10 + _currentDifficulty,
+            4 => 20 + _currentDifficulty * 2,
+            _ => 30 + _currentDifficulty * 3
+        };
+
+        int x = _rng.Next(1, maxX);
+        int m = _rng.Next(1, maxM);
+        int b = _rng.Next(0, maxB);
         int y = m * x + b;
         return new Question { Text = _localization.Get("Question_Algebra", m, b, y), Answer = x };
     }
 
     private Question WordProblem()
     {
-        int apples = _rng.Next(3, 15 + _currentDifficulty);
+        // Scale word problem complexity with grade and difficulty
+        int maxApples = CurrentPlayer.Grade switch
+        {
+            3 => 10 + _currentDifficulty * 2,
+            4 => 20 + _currentDifficulty * 3,
+            _ => 30 + _currentDifficulty * 4
+        };
+        
+        int apples = _rng.Next(3, maxApples);
         int eaten = _rng.Next(1, apples);
         return new Question { Text = _localization.Get("Question_WordProblem", apples, eaten), Answer = apples - eaten };
     }
 
     private Question GraphQuestion()
     {
+        // Scale graph complexity with grade and difficulty
+        int maxCoordinate = CurrentPlayer.Grade switch
+        {
+            4 => 10 + _currentDifficulty * 2,
+            _ => 15 + _currentDifficulty * 3
+        };
+        
+        int maxSlope = CurrentPlayer.Grade switch
+        {
+            4 => 5 + _currentDifficulty,
+            _ => 8 + _currentDifficulty * 2
+        };
+
         int x1 = 0;
-        int y1 = _rng.Next(0, 10 + _currentDifficulty);
-        int x2 = _rng.Next(1, 10 + _currentDifficulty);
-        int slope = _rng.Next(-5 - _currentDifficulty, 6 + _currentDifficulty);
+        int y1 = _rng.Next(0, maxCoordinate);
+        int x2 = _rng.Next(1, maxCoordinate);
+        int slope = _rng.Next(-maxSlope, maxSlope + 1);
         int y2 = y1 + slope * (x2 - x1);
         return new Question { Text = _localization.Get("Question_Graph", x1, y1, x2, y2), Answer = slope };
     }

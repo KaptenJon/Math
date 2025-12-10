@@ -27,7 +27,7 @@ public class QuizPage : ContentPage
         FontSize = 22,
         FontAttributes = FontAttributes.Bold,
         HorizontalTextAlignment = TextAlignment.Start,
-        HorizontalOptions = LayoutOptions.StartAndExpand,
+        HorizontalOptions = LayoutOptions.Fill,
         TextColor = Color.FromArgb("#2C1810"),
         LineBreakMode = LineBreakMode.WordWrap
     };
@@ -43,7 +43,7 @@ public class QuizPage : ContentPage
     private AbsoluteLayout _treeLayout = null!;
     private readonly List<Point> _baublePositions = new();
     private Image _santa = null!;
-    private Frame _santaFrame = null!;
+    private Border _santaFrame = null!;
     private int _santaStep = 0;
     private readonly List<BoxView> _presents = new();
 
@@ -310,12 +310,11 @@ public class QuizPage : ContentPage
         };
         
         _santa = new Image(); // dummy placeholder
-        _santaFrame = new Frame
+        _santaFrame = new Border
         {
             Padding = 0,
-            BackgroundColor = Colors.Transparent,
-            BorderColor = Colors.Transparent,
-            HasShadow = true,
+            StrokeThickness = 0,
+            Background = new SolidColorBrush(Colors.Transparent),
             Content = santaImage
         };
         
@@ -323,9 +322,11 @@ public class QuizPage : ContentPage
         AbsoluteLayout.SetLayoutFlags(_santaFrame, AbsoluteLayoutFlags.None);
         _treeLayout.Children.Add(_santaFrame);
 
-        return new Frame
+        return new Border
         {
             Padding = new Thickness(6),
+            StrokeThickness = 2,
+            StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 15 },
             Background = new LinearGradientBrush
             {
                 StartPoint = new Point(0, 0),
@@ -336,11 +337,9 @@ public class QuizPage : ContentPage
                     new GradientStop { Color = Colors.White, Offset = 1.0f }
                 }
             },
-            BorderColor = Color.FromArgb("#C41E3A"),
-            HasShadow = true,
+            Stroke = new SolidColorBrush(Color.FromArgb("#C41E3A")),
             Content = _treeLayout,
-            VerticalOptions = LayoutOptions.Start,
-            CornerRadius = 15
+            VerticalOptions = LayoutOptions.Start
         };
     }
 
@@ -516,7 +515,7 @@ public class QuizPage : ContentPage
     {
         step = System.Math.Clamp(step, 0, _baublePositions.Count - 1);
         var p = _baublePositions[step];
-        await _santaFrame.TranslateTo(0, 0, 0);
+        await _santaFrame.TranslateToAsync(0, 0, 0);
         AbsoluteLayout.SetLayoutBounds(_santaFrame, new Rect(p.X - 18, p.Y - 18, 36, 36));
         AbsoluteLayout.SetLayoutFlags(_santaFrame, AbsoluteLayoutFlags.None);
         await _santaFrame.ScaleToAsync(1.2, 150, Easing.BounceOut);

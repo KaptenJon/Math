@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net10.0-android;net10.0-windows10.0.19041.0</TargetFrameworks>
     <OutputType>Exe</OutputType>
@@ -12,32 +12,10 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
-    
-    <!-- Android App Identity -->
-    <ApplicationId>com.mathquest.app</ApplicationId>
-    <ApplicationTitle>Math Quest</ApplicationTitle>
-    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-    <ApplicationVersion>1</ApplicationVersion>
   </PropertyGroup>
-
-  <!-- Android Signing Configuration for Release (optional - Google Play App Signing recommended) -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Release' AND $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' AND '$(AndroidKeyStore)' == 'True'">
-    <AndroidSigningKeyStore>mathquest-upload.keystore</AndroidSigningKeyStore>
-    <AndroidSigningKeyAlias>upload</AndroidSigningKeyAlias>
-    <AndroidSigningKeyPass>$(ANDROID_KEY_PASSWORD)</AndroidSigningKeyPass>
-    <AndroidSigningStorePass>$(ANDROID_KEYSTORE_PASSWORD)</AndroidSigningStorePass>
-    <!-- Generate AAB (Android App Bundle) for Play Store -->
-    <AndroidPackageFormat>aab</AndroidPackageFormat>
-  </PropertyGroup>
-  
-  <!-- Default Android Package Format for Release -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Release' AND $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
-    <AndroidPackageFormat>aab</AndroidPackageFormat>
-  </PropertyGroup>
-
   <ItemGroup>
-    <!-- App Icon - updated festive design -->
-    <MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#1A4D2E" />
+    <!-- App Icon -->
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
     <!-- Splash Screen -->
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
     <!-- Include all images -->
@@ -59,6 +37,10 @@
       <Link>%(Filename)%(Extension)</Link>
     </None>
   </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+    <Page Remove="Platforms\Windows\App.xaml" />
+    <None Remove="Platforms\Windows\App.xaml" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
@@ -70,8 +52,3 @@
     </None>
   </ItemGroup>
 </Project>
-
-
-
-
-
