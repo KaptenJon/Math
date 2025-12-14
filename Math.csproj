@@ -22,8 +22,8 @@
 
   <!-- Android Signing Configuration for Release (optional - Google Play App Signing recommended) -->
   <PropertyGroup Condition="'$(Configuration)' == 'Release' AND $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' AND '$(AndroidKeyStore)' == 'True'">
-    <AndroidSigningKeyStore>mathquest.keystore</AndroidSigningKeyStore>
-    <AndroidSigningKeyAlias>mathquest</AndroidSigningKeyAlias>
+    <AndroidSigningKeyStore>mathquest-upload.keystore</AndroidSigningKeyStore>
+    <AndroidSigningKeyAlias>upload</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>$(ANDROID_KEY_PASSWORD)</AndroidSigningKeyPass>
     <AndroidSigningStorePass>$(ANDROID_KEYSTORE_PASSWORD)</AndroidSigningStorePass>
     <!-- Generate AAB (Android App Bundle) for Play Store -->
@@ -70,6 +70,7 @@
     </None>
   </ItemGroup>
 </Project>
+
 
 
 
