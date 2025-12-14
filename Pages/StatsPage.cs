@@ -7,6 +7,9 @@ public class StatsPage : ContentPage
 {
     private readonly IGameService _gameService;
     private readonly ILocalizationService _loc;
+    private readonly Label _headerLabel;
+    private readonly Label _overallLabel;
+    private readonly VerticalStackLayout _mainLayout;
 
     public StatsPage()
     {
@@ -16,35 +19,80 @@ public class StatsPage : ContentPage
         Title = _loc["Stats_Title"];
         BackgroundColor = Color.FromArgb("#B0E0E6");
 
-        var player = _gameService.CurrentPlayer;
-
         // Header
-        var headerLabel = new Label
+        _headerLabel = new Label
         {
-            Text = $"?? {_loc["Stats_Title"]}",
+            Text = _loc["Stats_Title"],
             FontSize = 28,
             FontAttributes = FontAttributes.Bold,
             TextColor = Colors.White,
             Margin = new Thickness(20, 20, 20, 10)
         };
 
-        // Three stat cards: Today, This Week, This Month
-        var todayCard = CreateStatCard(_loc["Stats_Today"], GetTodayStats(player));
-        var weekCard = CreateStatCard(_loc["Stats_ThisWeek"], GetWeekStats(player));
-        var monthCard = CreateStatCard(_loc["Stats_ThisMonth"], GetMonthStats(player));
-
-        // Overall stats
-        var overallLabel = new Label
+        // Overall stats header
+        _overallLabel = new Label
         {
-            Text = "Overall Stats",
+            Text = _loc["Stats_Overall"],
             FontSize = 22,
             FontAttributes = FontAttributes.Bold,
             TextColor = Color.FromArgb("#8B0000"),
             Margin = new Thickness(20, 20, 20, 10)
         };
 
-        var totalLessons = player.GetTotalLessons();
-        var accuracy = totalLessons > 0 ? player.GetOverallAccuracy() : 0;
+        _mainLayout = new VerticalStackLayout
+        {
+            Spacing = 0,
+            Children = { _headerLabel }
+        };
+
+        Content = new ScrollView
+        {
+            Content = _mainLayout,
+            Background = new LinearGradientBrush
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(0, 1),
+                GradientStops = new GradientStopCollection
+                {
+                    new GradientStop { Color = Color.FromArgb("#1A4D2E"), Offset = 0.0f },
+                    new GradientStop { Color = Color.FromArgb("#2C6B3F"), Offset = 0.5f },
+                    new GradientStop { Color = Color.FromArgb("#8B0000"), Offset = 1.0f }
+                }
+            }
+        };
+
+        _loc.LanguageChanged += RefreshStats;
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        RefreshStats();
+    }
+
+    private void RefreshStats()
+    {
+        var player = _gameService.CurrentPlayer;
+
+        // Clear old cards (except header)
+        while (_mainLayout.Children.Count > 1)
+        {
+            _mainLayout.Children.RemoveAt(1);
+        }
+
+        // Update header texts
+        _headerLabel.Text = _loc["Stats_Title"];
+        _overallLabel.Text = _loc["Stats_Overall"];
+
+        // Create updated stat cards
+        var todayCard = CreateStatCard(_loc["Stats_Today"], GetTodayStats(player));
+        var weekCard = CreateStatCard(_loc["Stats_ThisWeek"], GetWeekStats(player));
+        var monthCard = CreateStatCard(_loc["Stats_ThisMonth"], GetMonthStats(player));
+
+        var totalSessions = player.SessionStats.Count;
+        var totalQuestions = player.SessionStats.Sum(s => s.TotalQuestions);
+        var totalCorrect = player.SessionStats.Sum(s => s.CorrectAnswers);
+        var accuracy = totalQuestions > 0 ? (double)totalCorrect / totalQuestions * 100 : 0;
 
         var overallCard = new Border
         {
@@ -59,50 +107,23 @@ public class StatsPage : ContentPage
                 Spacing = 12,
                 Children =
                 {
-                    new Label { Text = $"?? {_loc.Get("Stats_Lessons", totalLessons)}", FontSize = 18, TextColor = Color.FromArgb("#165B33") },
-                    new Label { Text = $"?? {_loc.Get("Stats_Accuracy", accuracy.ToString("F1"))}", FontSize = 18, TextColor = Color.FromArgb("#165B33") },
-                    new Label { Text = $"? {_loc.Get("Stats_Points", player.Points)}", FontSize = 18, TextColor = Color.FromArgb("#165B33") }
+                    new Label { Text = _loc.Get("Stats_Sessions", totalSessions), FontSize = 18, TextColor = Color.FromArgb("#165B33") },
+                    new Label { Text = _loc.Get("Stats_Questions", totalQuestions), FontSize = 18, TextColor = Color.FromArgb("#165B33") },
+                    new Label { Text = _loc.Get("Stats_Accuracy", accuracy.ToString("F1")), FontSize = 18, TextColor = Color.FromArgb("#165B33") },
+                    new Label { Text = _loc.Get("Stats_Points", player.Points), FontSize = 18, TextColor = Color.FromArgb("#165B33") }
                 }
             }
         };
 
-        Content = new ScrollView
-        {
-            Content = new VerticalStackLayout
-            {
-                Spacing = 0,
-                Children =
-                {
-                    headerLabel,
-                    todayCard,
-                    weekCard,
-                    monthCard,
-                    overallLabel,
-                    overallCard
-                }
-            },
-            Background = new LinearGradientBrush
-            {
-                StartPoint = new Point(0, 0),
-                EndPoint = new Point(0, 1),
-                GradientStops = new GradientStopCollection
-                {
-                    new GradientStop { Color = Color.FromArgb("#1A4D2E"), Offset = 0.0f },
-                    new GradientStop { Color = Color.FromArgb("#2C6B3F"), Offset = 0.5f },
-                    new GradientStop { Color = Color.FromArgb("#8B0000"), Offset = 1.0f }
-                }
-            }
-        };
-
-        _loc.LanguageChanged += () =>
-        {
-            Title = _loc["Stats_Title"];
-            headerLabel.Text = $"?? {_loc["Stats_Title"]}";
-            overallLabel.Text = _loc["Stats_Title"];
-        };
+        // Add cards to layout
+        _mainLayout.Children.Add(todayCard);
+        _mainLayout.Children.Add(weekCard);
+        _mainLayout.Children.Add(monthCard);
+        _mainLayout.Children.Add(_overallLabel);
+        _mainLayout.Children.Add(overallCard);
     }
 
-    private Border CreateStatCard(string period, (int lessons, double accuracy) stats)
+    private Border CreateStatCard(string period, (int sessions, int questions, double accuracy) stats)
     {
         return new Border
         {
@@ -127,43 +148,47 @@ public class StatsPage : ContentPage
                 Children =
                 {
                     new Label { Text = period, FontSize = 20, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#8B0000") },
-                    new Label { Text = $"{_loc.Get("Stats_Lessons", stats.lessons)}", FontSize = 16, TextColor = Color.FromArgb("#165B33") },
-                    new Label { Text = $"{_loc.Get("Stats_Accuracy", stats.accuracy.ToString("F1"))}", FontSize = 16, TextColor = Color.FromArgb("#165B33") }
+                    new Label { Text = _loc.Get("Stats_Sessions", stats.sessions), FontSize = 16, TextColor = Color.FromArgb("#165B33") },
+                    new Label { Text = _loc.Get("Stats_Questions", stats.questions), FontSize = 16, TextColor = Color.FromArgb("#165B33") },
+                    new Label { Text = _loc.Get("Stats_Accuracy", stats.accuracy.ToString("F1")), FontSize = 16, TextColor = Color.FromArgb("#165B33") }
                 }
             }
         };
     }
 
-    private (int lessons, double accuracy) GetTodayStats(Player player)
+    private (int sessions, int questions, double accuracy) GetTodayStats(Player player)
     {
         var today = DateTime.Now.Date;
         var todayStats = player.SessionStats.Where(s => s.CompletedAt.Date == today).ToList();
-        var lessons = todayStats.Count;
-        var accuracy = todayStats.Count > 0 
-            ? (double)todayStats.Sum(s => s.CorrectAnswers) / todayStats.Sum(s => s.TotalQuestions) * 100 
+        var sessions = todayStats.Count;
+        var questions = todayStats.Sum(s => s.TotalQuestions);
+        var accuracy = questions > 0 
+            ? (double)todayStats.Sum(s => s.CorrectAnswers) / questions * 100 
             : 0;
-        return (lessons, accuracy);
+        return (sessions, questions, accuracy);
     }
 
-    private (int lessons, double accuracy) GetWeekStats(Player player)
+    private (int sessions, int questions, double accuracy) GetWeekStats(Player player)
     {
         var weekAgo = DateTime.Now.AddDays(-7);
         var weekStats = player.SessionStats.Where(s => s.CompletedAt >= weekAgo).ToList();
-        var lessons = weekStats.Count;
-        var accuracy = weekStats.Count > 0 
-            ? (double)weekStats.Sum(s => s.CorrectAnswers) / weekStats.Sum(s => s.TotalQuestions) * 100 
+        var sessions = weekStats.Count;
+        var questions = weekStats.Sum(s => s.TotalQuestions);
+        var accuracy = questions > 0 
+            ? (double)weekStats.Sum(s => s.CorrectAnswers) / questions * 100 
             : 0;
-        return (lessons, accuracy);
+        return (sessions, questions, accuracy);
     }
 
-    private (int lessons, double accuracy) GetMonthStats(Player player)
+    private (int sessions, int questions, double accuracy) GetMonthStats(Player player)
     {
         var monthAgo = DateTime.Now.AddDays(-30);
         var monthStats = player.SessionStats.Where(s => s.CompletedAt >= monthAgo).ToList();
-        var lessons = monthStats.Count;
-        var accuracy = monthStats.Count > 0 
-            ? (double)monthStats.Sum(s => s.CorrectAnswers) / monthStats.Sum(s => s.TotalQuestions) * 100 
+        var sessions = monthStats.Count;
+        var questions = monthStats.Sum(s => s.TotalQuestions);
+        var accuracy = questions > 0 
+            ? (double)monthStats.Sum(s => s.CorrectAnswers) / questions * 100 
             : 0;
-        return (lessons, accuracy);
+        return (sessions, questions, accuracy);
     }
 }

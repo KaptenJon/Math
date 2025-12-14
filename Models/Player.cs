@@ -13,10 +13,6 @@ public class Player
     
     // Statistics tracking
     public List<SessionStat> SessionStats { get; } = new();
-    
-    public int GetTotalLessons() => SessionStats.Sum(s => s.TotalQuestions);
-    public int GetTotalCorrect() => SessionStats.Sum(s => s.CorrectAnswers);
-    public double GetOverallAccuracy() => GetTotalLessons() == 0 ? 0 : (double)GetTotalCorrect() / GetTotalLessons() * 100;
 }
 
 public class SessionStat
