@@ -64,4 +64,4 @@ No data is collected, transmitted, or shared. Period.*
 ---
 
 Math Quest - Educational Math Game for Children  
-© 2024 - All Rights Reserved
+Copyright 2024 - All Rights Reserved
