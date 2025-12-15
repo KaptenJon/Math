@@ -13,4 +13,4 @@ Math Quest is a free educational math application for children, designed to make
 ---
 
 **Math Quest** - Educational Math Game for Children  
-© 2024 - All Rights Reserved
+Copyright 2024 - All Rights Reserved
